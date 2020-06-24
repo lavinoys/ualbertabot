@@ -9,6 +9,7 @@ namespace UAlbertaBot
 {
 namespace Assert
 {
+    // 디버깅용 TDD 파일인듯?
     std::string lastErrorMessage;
 
     const std::string currentDateTime() 

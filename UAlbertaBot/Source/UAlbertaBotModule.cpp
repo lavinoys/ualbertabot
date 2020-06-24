@@ -21,16 +21,17 @@
 
 using namespace UAlbertaBot;
 
+// 게임 시작하면 제일먼저 실행
 UAlbertaBotModule::UAlbertaBotModule()
 {
     Global::GameStart();
 }
 
-// This gets called when the bot starts!
+// 봇 호출
 void UAlbertaBotModule::onStart()
 {
-    // Parse the bot's configuration file if it has one, change this file path to where your config file is
-    // Any relative path name will be relative to Starcraft installation folder
+    // configuration file을 분석한다. 만약 바꾸고 싶으면 여기를 수정해라
+    // Starcraft installation folder에 관련된 경로 명으로 해야함 
     ParseUtils::ParseConfigFile(Config::ConfigFile::ConfigFileLocation);
 
     // Set our BWAPI options here    
@@ -52,7 +53,7 @@ void UAlbertaBotModule::onStart()
         BWAPI::Broodwar->printf("Hello! I am %s, written by %s", Config::BotInfo::BotName.c_str(), Config::BotInfo::Authors.c_str());
     }
 
-    // Call BWTA to read and analyze the current map
+    // BWTA를 읽어서 현재 맵을 분석한다.
     if (Config::Modules::UsingGameCommander)
 	{
         if (Config::Modules::UsingStrategyIO)

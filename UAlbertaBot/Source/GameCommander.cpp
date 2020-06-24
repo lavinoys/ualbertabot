@@ -77,7 +77,7 @@ void GameCommander::drawDebugInterface()
     m_timerManager.displayTimers(490, 225);
     drawGameInformation(4, 1);
 
-	// draw position of mouse cursor
+	// 마우스 커서를 그려줌
 	if (Config::Debug::DrawMouseCursorInfo)
 	{
 		int mouseX = BWAPI::Broodwar->getMousePosition().x + BWAPI::Broodwar->getScreenPosition().x;
@@ -86,6 +86,7 @@ void GameCommander::drawDebugInterface()
 	}
 }
 
+// 게임 정보를 출력해줌
 void GameCommander::drawGameInformation(int x, int y)
 {
     BWAPI::Broodwar->drawTextScreen(x, y, "\x04Players:");
@@ -129,7 +130,7 @@ bool GameCommander::isAssigned(BWAPI::Unit unit) const
 // validates units as usable for distribution to various managers
 void GameCommander::setValidUnits()
 {
-	// make sure the unit is completed and alive and usable
+	// 사용 가능한 아군 유닛인지 확인하는 작업
 	for (auto & unit : BWAPI::Broodwar->self()->getUnits())
 	{
 		if (UnitUtil::IsValidUnit(unit))
@@ -141,7 +142,7 @@ void GameCommander::setValidUnits()
 
 void GameCommander::setScoutUnits()
 {
-    // if we haven't set a scout unit, do it
+    // 정찰 유닛이 없으면 여기 동작함
     if (m_scoutUnits.empty() && !m_initialScoutSet)
     {
         BWAPI::Unit supplyProvider = getFirstSupplyProvider();

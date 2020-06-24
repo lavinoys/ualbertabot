@@ -34,15 +34,16 @@ void WorkerManager::updateWorkerStatus()
 {
     PROFILE_FUNCTION();
 
-    // for each of our Workers
+    // 일꾼 반복문
     for (auto & worker : m_workerData.getWorkers())
     {
+        // 건설중 이거나 생산중이면 넘기는 듯
         if (!worker->isCompleted())
         {
             continue;
         }
 
-        // if it's idle
+        // 일꾼이 걍 쉬고 있는지?
         if (worker->isIdle() &&
             (m_workerData.getWorkerJob(worker) != WorkerData::Build) &&
             (m_workerData.getWorkerJob(worker) != WorkerData::Move) &&
@@ -51,12 +52,12 @@ void WorkerManager::updateWorkerStatus()
             m_workerData.setWorkerJob(worker, WorkerData::Idle, nullptr);
         }
 
-        // if its job is gas
+        // 가스를 채취하는 일꾼인지?
         if (m_workerData.getWorkerJob(worker) == WorkerData::Gas)
         {
             const BWAPI::Unit refinery = m_workerData.getWorkerResource(worker);
 
-            // if the refinery doesn't exist anymore
+            // 가스 채취 더 이상 못하면 미네랄로 고고
             if (!refinery || !refinery->exists() ||	refinery->getHitPoints() <= 0)
             {
                 setMineralWorker(worker);
@@ -77,16 +78,16 @@ void WorkerManager::stopRepairing(BWAPI::Unit worker)
 
 void WorkerManager::handleGasWorkers()
 {
-    // for each unit we have
+    // 아군 일꾼 반복문
     for (auto & unit : BWAPI::Broodwar->self()->getUnits())
     {
-        // if that unit is a refinery
+        // 가스를 채취하는 일꾼이라면
         if (unit->getType().isRefinery() && unit->isCompleted() && !isGasStealRefinery(unit))
         {
-            // get the number of workers currently assigned to it
+            // 가스 채취 하는 일꾼을 샌다
             const int numAssigned = m_workerData.getNumAssignedWorkers(unit);
 
-            // if it's less than we want it to be, fill 'er up
+            // 가스 채취 할 일꾼의 수보다 적으면 일꾼 붙여드림. 설정 파일에 값이 있음
             for (int i=0; i<(Config::Macro::WorkersPerRefinery-numAssigned); ++i)
             {
                 BWAPI::Unit gasWorker = getGasWorker(unit);
@@ -126,15 +127,15 @@ bool WorkerManager::isGasStealRefinery(BWAPI::Unit unit)
 
 void WorkerManager::handleIdleWorkers()
 {
-    // for each of our workers
+    // 일꾼 반복문
     for (auto & worker : m_workerData.getWorkers())
     {
         UAB_ASSERT(worker != nullptr, "Worker was null");
 
-        // if it is idle
+        // 쉬는 놈이면
         if (m_workerData.getWorkerJob(worker) == WorkerData::Idle)
         {
-            // send it to the nearest mineral patch
+            // 미네랄에 붙여준다.
             setMineralWorker(worker);
         }
     }

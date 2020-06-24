@@ -24,7 +24,7 @@ BaseLocation::BaseLocation(int baseID, const std::vector<BWAPI::Unit> & resource
     int resourceCenterY = 0;
 
     // add each of the resources to its corresponding container
-    for (auto & resource : resources)
+    for (auto & resource : resources) // 여기서 auto는 vector의 메모리 자동 관리 기능
     {
         if (resource->getType().isMineralField())
         {
@@ -79,7 +79,7 @@ BaseLocation::BaseLocation(int baseID, const std::vector<BWAPI::Unit> & resource
         }
     }
 
-    // if this base location position is near our own resource depot, it's our start location
+    // 시작 지점에서 가까운 자원 지역이 있으면 시작지점으로 인식
     for (auto & unit : BWAPI::Broodwar->getAllUnits())
     {
         if (unit->getPlayer() == BWAPI::Broodwar->self() && unit->getType().isResourceDepot())
@@ -94,7 +94,7 @@ BaseLocation::BaseLocation(int baseID, const std::vector<BWAPI::Unit> & resource
         }
     }
 
-    // if it's not a start location, we need to calculate the depot position
+    // 시작 장소가 아니면, 확장 지역으로 담아둔다.
     if (!isStartLocation())
     {
         const BWAPI::UnitType depot = BWAPI::Broodwar->self()->getRace().getResourceDepot();
@@ -102,11 +102,11 @@ BaseLocation::BaseLocation(int baseID, const std::vector<BWAPI::Unit> & resource
         const int offsetX = 1;
         const int offsetY = 1;
 
-        // the position of the depot will be the closest spot we can build one from the resource center
+        // 자원과 가깝고 건설 가능한 지역을 찾는다.
         for (auto & tile : getClosestTiles())
         {
-            // the build position will be up-left of where this tile is
-            // this means we are positioning the center of the resouce depot
+            // 좌상단부터 건설 가능한 지역을 찾는다.
+            // 그니까 자원에 중간을 찾는거다.
             const BWAPI::TilePosition buildTile(tile.x - offsetX, tile.y - offsetY);
 
             if (BWAPI::Broodwar->canBuildHere(buildTile, depot))
@@ -118,7 +118,7 @@ BaseLocation::BaseLocation(int baseID, const std::vector<BWAPI::Unit> & resource
     }
 }
 
-// TODO: calculate the actual depot position
+// TODO: 실제로 확장할 수 있는 지역인지 계산
 const BWAPI::TilePosition & BaseLocation::getDepotPosition() const
 {
     return m_depotPosition;
@@ -128,7 +128,7 @@ void BaseLocation::setPlayerOccupying(BWAPI::Player player, bool occupying)
 {
     m_isPlayerOccupying[player] = occupying;
 
-    // if this base is a start location that's occupied by the enemy, it's that enemy's start location
+    // 베이스 중에서 첫번째로 적이 나타나면 그곳을 적 시작지역으로 인식
     if (occupying && player == BWAPI::Broodwar->enemy() && isStartLocation() && m_isPlayerStartLocation[player] == false)
     {
         m_isPlayerStartLocation[player] = true;
@@ -239,7 +239,7 @@ void BaseLocation::draw()
     BWAPI::Broodwar->drawTextMap(BWAPI::Position(m_left, m_top + 3), ss.str().c_str());
     BWAPI::Broodwar->drawTextMap(BWAPI::Position(m_left, m_bottom), ss.str().c_str());
 
-    // draw the base bounding box
+    // base를 그려준다.
     BWAPI::Broodwar->drawLineMap(m_left, m_top, m_right, m_top, BWAPI::Colors::White);
     BWAPI::Broodwar->drawLineMap(m_right, m_top, m_right, m_bottom, BWAPI::Colors::White);
     BWAPI::Broodwar->drawLineMap(m_right, m_bottom, m_left, m_bottom, BWAPI::Colors::White);

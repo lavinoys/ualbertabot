@@ -25,10 +25,10 @@ void UAlbertaBot_PlayGame()
 
 	UAlbertaBotModule bot;
 
-	// The main game loop, which continues while we are connected to BWAPI and in a game
+	// 여기가 메인 루프, 게임이 연결됐는지 반복 체크
 	while (BWAPI::BWAPIClient.isConnected() && BWAPI::Broodwar->isInGame())
 	{
-		// Handle each of the events that happened on this frame of the game
+		// 게임에 프레임 단위로 일어나는 이벤트를 각각 핸들링 함
 		for (const BWAPI::Event & e : BWAPI::Broodwar->getEvents())
 		{
 			switch (e.getType())
@@ -74,16 +74,16 @@ int main(int argc, char * argv[])
 	size_t gameCount = 0;
 	while (true)
 	{
-		// if we are not currently connected to BWAPI, try to reconnect
+		// 접속이 끊기면 재접속 시도함
 		if (!BWAPI::BWAPIClient.isConnected())
 		{
 			UAlbertaBot_BWAPIReconnect();
 		}
 
-		// if we have connected to BWAPI
+		// BWAPI 접속 분기
 		while (BWAPI::BWAPIClient.isConnected())
 		{
-			// wait for the game to start until the game starts
+			// 게임이 시작할 때까지 기다림
 			std::cout << "Waiting for game start\n";
 			while (BWAPI::BWAPIClient.isConnected() && !BWAPI::Broodwar->isInGame())
 			{
@@ -96,7 +96,7 @@ int main(int argc, char * argv[])
 				break;
 			}
 
-			// If we are successfully in a game, call the module to play the game
+			// 게임에 들어가면 아래 문구를 찍어줌
 			if (BWAPI::Broodwar->isInGame())
 			{
 				std::cout << "Playing game " << gameCount++ << " on map " << BWAPI::Broodwar->mapFileName() << "\n";

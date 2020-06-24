@@ -12,7 +12,7 @@ namespace Config
     {
         bool ConfigFileFound                = false;
         bool ConfigFileParsed               = false;
-        std::string ConfigFileLocation      = "UAlbertaBot_Config.txt";
+        std::string ConfigFileLocation      = "UAlbertaBot_Config.json";
     }
 
     namespace Strategy
@@ -89,7 +89,7 @@ namespace Config
         bool PrintModuleTimeout             = false;	
 
         std::string ErrorLogFilename        = "UAB_ErrorLog.txt";
-        bool LogAssertToErrorFile           = false;
+        bool LogAssertToErrorFile           = true;
 
         BWAPI::Color ColorLineTarget        = BWAPI::Colors::White;
         BWAPI::Color ColorLineMineral       = BWAPI::Colors::Cyan;
