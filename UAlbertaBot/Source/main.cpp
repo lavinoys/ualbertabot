@@ -90,7 +90,7 @@ int main(int argc, char * argv[])
 				BWAPI::BWAPIClient.update();
 			}
 
-			// Check to see if Starcraft shut down somehow
+			// Starcraft가 종료 되면
 			if (BWAPI::BroodwarPtr == nullptr)
 			{
 				break;

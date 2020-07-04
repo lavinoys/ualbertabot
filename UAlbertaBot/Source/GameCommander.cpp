@@ -28,7 +28,7 @@ void GameCommander::update()
 
 	m_timerManager.startTimer(TimerManager::All);
 
-	// populate the unit vectors we will pass into various managers
+	// 유닛을 각 매너지럴 통해 벡터화한다.
 	handleUnitAssignments();
 
 	// utility managers
@@ -108,16 +108,16 @@ void GameCommander::drawGameInformation(int x, int y)
     BWAPI::Broodwar->drawTextScreen(x+50, y, "\x04%d %4dm %3ds", BWAPI::Broodwar->getFrameCount(), (int)(BWAPI::Broodwar->getFrameCount()/(23.8*60)), (int)((int)(BWAPI::Broodwar->getFrameCount()/23.8)%60));
 }
 
-// assigns units to various managers
+// 각 매니저에게 할당한다.
 void GameCommander::handleUnitAssignments()
 {
 	m_validUnits.clear();
     m_combatUnits.clear();
 
-	// filter our units for those which are valid and usable
+	// 아군 유닛인지 사용은 가능한지 체크하여 할당
 	setValidUnits();
 
-	// set each type of unit
+	// 유닛 타입을 정의한다.
 	setScoutUnits();
 	setCombatUnits();
 }
